@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <span v-bind:title="message">
+            指令
+        </span>
+    </div>
+    <script>
+        var app = new Vue({
+           el:'#app',
+           data:{
+               message:'v-bind被称为指令，指令带有前缀v-，会在渲染的dom上应用特殊的响应式行为。'
+           }
+        });
+    </script>
+</body>
+</html>

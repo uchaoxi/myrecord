@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app-insertvalue">
+        <span>messge:{{msg}}</span>
+        <span v-once>我是一次性插入的文本，不会改变:{{msg}}</span>
+        <p>双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML，你需要使用 v-html 指令</p>
+        <p >using v-html:span</p>
+    </div>
+    <script>
+        var app = new Vue({
+           el:'#app-insertvalue',
+           data:{
+               msg:'我是插入的文本'
+           }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{message1}}</p>
+        <p>{{message2}}</p>
+        <p>{{message3}}</p>
+        <p>{{message4}}</p>
+    </div>
+    <div id="app-freeze">
+        <p>{{foo}}</p>
+        <button v-on:click="foo = 'change'">change it</button>
+    </div>
+    <div id="app-method">
+        <p>除了数据属性，Vue 实例还暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来。</p>
+    </div>
+    <script>
+        var app = new Vue({
+            el:'#app',
+            data:{
+                message1:'当一个 Vue 实例被创建时，它向 Vue 的响应式系统中加入了其 data 对象中能找到的所有的属性。当这些属性的值发生改变时，视图将会产生“响应”，即匹配更新为新的值。',
+                message2:'当这些数据改变时，视图会进行重渲染。值得注意的是只有当实例被创建时 data 中存在的属性才是响应式的。也就是说如果你添加一个新的属性,那么不会触发任何视图的更新',
+                message3:'如果你知道你会在晚些时候需要一个属性，但是一开始它为空或不存在，那么你仅需要设置一些初始值。"",0,false,[],null',
+                message4:'这里唯一的例外是使用 Object.freeze()，这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。'
+            }
+        });
+        var obj = {
+            foo:'foo'
+        }
+        Object.freeze(obj);
+        var app2 = new Vue({
+            el:'#app-freeze',
+            data:obj
+        })
+        var data={
+            a:1
+        }
+        var app3 = new Vue({
+            el:'#app-method',
+            data:data
+        })
+        document.writeln("app3.$data===data:");
+        document.writeln(app3.$data===data);
+        document.writeln("app3.$el===document.getElementById('app-method'):");
+        document.writeln(app3.$el===document.getElementById('app-method'));
+        document.write("<br>")
+        document.writeln("vm.$watch('a', function (newValue, oldValue) {})")
+    </script>
+</body>
+</html>
