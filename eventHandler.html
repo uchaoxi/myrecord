@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>事件处理</h1>
+        <h2>监听事件</h2>
+        <p>可以用 v-on 指令监听 DOM 事件，并在触发时运行一些 JavaScript 代码。</p>
+        <div>
+            <button @click="counter+=1">add 1</button>
+            <p>the button above has been clicked {{counter}} times</p>
+        </div>
+        <h2>事件处理方法</h2>
+        <p>v-on不直接写代码逻辑，而是绑定方法</p>
+        <button @click="greet">Greet</button>
+        <p>内联处理器中的方法</p>
+        <p>除了直接绑定方法，还可以在内联js语句中调用方法</p>
+        <div>
+            <button @click="say('hi')">say hi</button>
+            <button @click="say('what')">say what</button>
+        </div>
+        <p>有时也需要在内联语句处理器中访问原始的 DOM 事件。可以用特殊变量 $event 把它传入方法：</p>
+        <button @click="warn('can not submit',$event)">
+            Submit
+        </button>
+        <h2>事件修饰符</h2>
+        <p>在事件处理程序中调用 event.preventDefault() 或 event.stopPropagation() 是非常常见的需求。尽管我们可以在方法中轻松实现这点，但更好的方式是：方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。为了解决这个问题，Vue.js 为 v-on 提供了事件修饰符。之前提过，修饰符是由点开头的指令后缀来表示的。</p>
+        <ul>
+            <li>.stop 阻止事件继续传播</li>
+            <li>.prevent 阻止默认行为</li>
+            <li>.capture 捕获事件，先在此处理，再交给内部元素处理</li>
+            <li>.self 只当在 event.target 是当前元素自身时触发处理函数，即事件是自己触发的，不是从内部元素触发的</li>
+            <li>.once 点击事件将只会触发一次 </li>
+            <li>.passive 表示不会阻止浏览器默认行为，默认行为立刻执行，不等待绑定事件执行完毕，有效提升移动端xing'n</li>
+
+        </ul>
+        <!-- 阻止单击事件继续传播 -->
+        <a v-on:click.stop="doThis"></a>
+        <!-- 提交事件不再重载页面 -->
+        <form v-on:submit.prevent="doThis"></form>
+
+        <!-- 修饰符可以串联 -->
+        <a v-on:click.stop.prevent="doThis"></a>
+        <!-- 只有修饰符 -->
+        <form v-on:submit.prevent></form>
+        <!-- 添加事件监听器时使用事件捕获模式 -->
+        <!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+        <div v-on:click.capture="doThis">...</div>
+        <!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+        <!-- 即事件不是从内部元素触发的 -->
+        <div v-on:click.self="doSelf">
+            <p>----</p>
+        </div>
+        <p>once</p>
+        <p>不像其它只能对原生的 DOM 事件起作用的修饰符，.once 修饰符还能被用到自定义的组件事件上。如果你还没有阅读关于组件的文档，现在大可不必担心。</p>
+
+        <p>不要把 .passive 和 .prevent 一起使用，因为 .prevent 将会被忽略，同时浏览器可能会向你展示一个警告。请记住，.passive 会告诉浏览器你不想阻止事件的默认行为。</p>
+        <h2>按键修饰符</h2>
+        <p>在监听键盘事件时，我们经常需要检查详细的按键。Vue 允许为 v-on 在监听键盘事件时添加按键修饰符：</p>
+        <!-- 只有在 `key` 是 `Enter` 时调用 greet -->
+        <input v-on:keyup.enter="greet">
+        <p>你可以直接将 KeyboardEvent.key 暴露的任意有效按键名转换为 kebab-case 来作为修饰符。</p>
+        <input v-on:keyup.page-down="greet">
+        <p>在上述示例中，处理函数只会在 $event.key 等于 PageDown 时被调用。</p>
+        <h3>按键码</h3>
+        <p>keyCode 的事件用法已经被废弃了并可能不会被最新的浏览器支持。</p>
+        <ul>
+            <li>.enter</li>
+            <li>.tab有点问题</li>
+            <li>.delete (捕获“删除”和“退格”键)</li>
+            <li>.esc</li>
+            <li>.space</li>
+            <li>.up</li>
+            <li>.down</li>
+            <li>.left</li>
+            <li>.right</li>
+
+        </ul>
+        <p>有一些按键 (.esc 以及所有的方向键) 在 IE9 中有不同的 key 值, 如果你想支持 IE9，这些内置的别名应该是首选。</p>
+        <p>你还可以通过全局 config.keyCodes 对象自定义按键修饰符别名：试了一下没有用</p>
+        <p>Vue.config.keyCodes.f1 = 112</p>
+        <input v-on:keyup.gg="greet" />
+        <h2>系统修饰键</h2>
+        <ul>
+            <li>.ctrl</li>
+            <li>.alt</li>
+            <li>.shift</li>
+            <li>.meta</li>
+        </ul>
+        <p>在 Mac 系统键盘上，meta 对应 command 键 (⌘)。在 Windows 系统键盘 meta 对应 Windows 徽标键 (⊞)。</p>
+        <p>alt + c</p>
+        <input @keyup.alt.67="greet">
+        <p>click + crtl</p>
+        <input @click.ctrl="greet">
+        <p>请注意修饰键与常规按键不同，在和 keyup 事件一起用时，事件触发时修饰键必须处于按下状态。换句话说，只有在按住 ctrl 的情况下释放其它按键，才能触发 keyup.ctrl。而单单释放 ctrl 也不会触发事件。如果你想要这样的行为，请为 ctrl 换用 keyCode：keyup.17。</p>
+        <h3>exact</h3>
+        <p>.exact 修饰符允许你控制由精确的系统修饰符组合触发的事件。</p>
+        <p>即使 Alt 或 Shift 被一同按下时也会触发</p>
+        <button @click.ctrl="onClick">A</button>
+       <p>有且只有 Ctrl 被按下的时候才触发</p>
+        <button @click.ctrl.exact="onCtrlClick">A</button>
+        <p>没有任何系统修饰符被按下的时候才触发 </p>
+        <button @click.exact="onClick">A</button>
+        <h3>鼠标按钮修饰符</h3>
+        <ul>
+            <li>.left</li>
+            <li>.right</li>
+            <li>.middle</li>
+        </ul>
+        
+        <div type="text" @click.left="greet">鼠标左键</div>
+          <div type="text" @click.middle="greet">鼠标中键</div>
+        <div @click.right="greet" oncontextmenu="return false">点击鼠标右键触发事件</div>
+        <h2>为什么在 HTML 中监听事件?</h2>
+        <p>因为所有的 Vue.js 事件处理方法和表达式都严格绑定在当前视图的 ViewModel 上，它不会导致任何维护上的困难。实际上，使用 v-on 有几个好处：
+
+扫一眼 HTML 模板便能轻松定位在 JavaScript 代码里对应的方法。
+
+因为你无须在 JavaScript 里手动绑定事件，你的 ViewModel 代码可以是非常纯粹的逻辑，和 DOM 完全解耦，更易于测试。
+
+当一个 ViewModel 被销毁时，所有的事件处理器都会自动被删除。你无须担心如何清理它们。</p>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello World!',
+                counter: 0,
+            },
+            methods: {
+                greet: function() {
+                    alert("hello vue!");
+                },
+                say: function(msg) {
+                    alert(msg);
+                },
+                warn: function(message, event) {
+                    if (event) event.preventDefault();
+                    alert(message);
+                },
+                doThis: function() {
+                    console.log("doing");
+
+                },
+                a: function() {
+                    console.log("a");
+                },
+                doSelf: function() {
+                    alert('self');
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

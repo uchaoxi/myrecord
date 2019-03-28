@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+      <h1>组件基础</h1>
+      <h2>基本示例</h2>
+      <p>语法Vue.component('componentName',{data,template:''})</p>
+      <button-counter>
+      </button-counter>
+      <p>因为组件是可复用的 Vue 实例，所以它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。</p>
+
+      <h3>组件的复用</h3>
+      <p>你可以将组件进行任意次数的复用,注意当点击按钮时，每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。</p>
+      <div>
+          <button-counter></button-counter>
+          <button-counter></button-counter>
+      </div>
+      <h3>data必须是个函数</h3>
+      <p>一个组件的data选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝</p>
+      <h2>组件的组织</h2>
+      <p>通常一个应用会以一棵嵌套的组件树形式来组织，为了能在模板中使用，这些组件必须先注册以便 Vue 能够识别。这里有两种组件的注册类型：全局注册和局部注册。至此，我们的组件都只是通过 Vue.component 全局注册的：</p>
+      <p>全局注册的组件可以用在其被注册之后的任何 (通过 new Vue) 新创建的 Vue 根实例，也包括其组件树中的所有子组件的模板中。</p>
+    </div>
+    <script>
+        Vue.component('button-counter',{
+            data:function(){
+                return {
+                    count:0
+                }
+            },
+            
+            template:'<button v-on:click="count++">You clicked me {{count}} times.</button>'
+        })
+        var app = new Vue({
+           el:'#app',
+           data:{
+               message:'Hello World!',
+               count:6,
+           }
+        });
+    </script>
+</body>
+</html>
