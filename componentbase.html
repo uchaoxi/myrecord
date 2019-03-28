@@ -1,48 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
+
 <body>
     <div id="app">
-      <h1>组件基础</h1>
-      <h2>基本示例</h2>
-      <p>语法Vue.component('componentName',{data,template:''})</p>
-      <button-counter>
-      </button-counter>
-      <p>因为组件是可复用的 Vue 实例，所以它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。</p>
+        <h1>组件基础</h1>
+        <h2>基本示例</h2>
+        <p>语法Vue.component('componentName',{data,template:''})</p>
+        <button-counter>
+        </button-counter>
+        <p>因为组件是可复用的 Vue 实例，所以它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。</p>
 
-      <h3>组件的复用</h3>
-      <p>你可以将组件进行任意次数的复用,注意当点击按钮时，每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。</p>
-      <div>
-          <button-counter></button-counter>
-          <button-counter></button-counter>
-      </div>
-      <h3>data必须是个函数</h3>
-      <p>一个组件的data选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝</p>
-      <h2>组件的组织</h2>
-      <p>通常一个应用会以一棵嵌套的组件树形式来组织，为了能在模板中使用，这些组件必须先注册以便 Vue 能够识别。这里有两种组件的注册类型：全局注册和局部注册。至此，我们的组件都只是通过 Vue.component 全局注册的：</p>
-      <p>全局注册的组件可以用在其被注册之后的任何 (通过 new Vue) 新创建的 Vue 根实例，也包括其组件树中的所有子组件的模板中。</p>
+        <h3>组件的复用</h3>
+        <p>你可以将组件进行任意次数的复用,注意当点击按钮时，每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。</p>
+        <div>
+            <button-counter></button-counter>
+            <button-counter></button-counter>
+        </div>
+        <h3>data必须是个函数</h3>
+        <p>一个组件的data选项必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝</p>
+        <h2>组件的组织</h2>
+        <p>通常一个应用会以一棵嵌套的组件树形式来组织，为了能在模板中使用，这些组件必须先注册以便 Vue 能够识别。这里有两种组件的注册类型：全局注册和局部注册。至此，我们的组件都只是通过 Vue.component 全局注册的：</p>
+        <p>全局注册的组件可以用在其被注册之后的任何 (通过 new Vue) 新创建的 Vue 根实例，也包括其组件树中的所有子组件的模板中。</p>
+        <h2>通过 Prop 向子组件传递数据</h2>
+        <p>Prop 是你可以在组件上注册的一些自定义特性。当一个值传递给一个 prop 特性的时候，它就变成了那个组件实例的一个属性。为了给博文组件传递一个标题，我们可以用一个 props 选项将其包含在该组件可接受的 prop 列表中：</p>
+        <p>一个组件默认可以拥有任意数量的 prop，任何值都可以传递给任何 prop。在上述模板中，你会发现我们能够在组件实例中访问这个值，就像访问 data 中的值一样。一个 prop 被注册之后，你就可以像这样把数据作为一个自定义特性传递进来：</p>
+
+        <blog-post title="my journey with vue"></blog-post>
+        <blog-post title="hello vue"></blog-post>
+        <p>然而在一个典型的应用中，你可能在 data 里有一个博文的数组：</p>
     </div>
+    <div id='blog-demo'>
+        <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></blog-post>
+        <p>如上所示，你会发现我们可以使用 v-bind 来动态传递 prop。这在你一开始不清楚要渲染的具体内容，比如从一个 API 获取博文列表的时候，是非常有用的。</p>
+        <h2>单个根元素</h2>
+        <p>当构件一个博文组件时，最终包括的部分远远不止标题，还有正文等</p>
+        <p>然而如果你在模板中尝试这样写，Vue 会显示一个错误，并解释道 every component must have a single root element (每个组件必须只有一个根元素)。你可以将模板的内容包裹在一个父元素内，来修复这个问题</p>
+        <p>当博客的属性越来越多，为绑定的属性定义每一个prop会很麻烦,所以组件定义了prop成员</p>
+        <blog-post2 v-bind:post="postdata">
+            
+        </blog-post2>
+        
+    </div>
+
+
     <script>
-        Vue.component('button-counter',{
-            data:function(){
+        Vue.component('blog-post2',{
+            props:['post'],
+            template:`
+            <div class="blog-post">
+                <h3>{{post.title}}</h3>
+                <div v-html="post.content"></div>
+            </div>
+            `,
+            
+        });
+        Vue.component('blog-post', {
+            props: ['title'],
+            template: '<h3>{{title}}</h3>'
+        });
+        Vue.component('button-counter', {
+            data: function() {
                 return {
-                    count:0
+                    count: 0
                 }
             },
-            
-            template:'<button v-on:click="count++">You clicked me {{count}} times.</button>'
-        })
-        var app = new Vue({
-           el:'#app',
-           data:{
-               message:'Hello World!',
-               count:6,
-           }
+
+            template: '<button v-on:click="count++">You clicked me {{count}} times.</button>'
         });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello World!',
+                count: 6,
+            }
+        });
+        var blog = new Vue({
+            el: '#blog-demo',
+            data: {
+                posts: [{
+                        id: 1,
+                        title: 'my journey with vue'
+                    },
+                    {
+                        id: 2,
+                        title: 'play with vue'
+                    },
+                    {
+                        id: 3,
+                        title: 'understand vue'
+                    }
+                ]
+            }
+        });
+
     </script>
 </body>
+
 </html>
