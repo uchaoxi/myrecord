@@ -1,1 +1,2 @@
-var jsondata=[1,2,3];
+　HandleRemote({"title":"哈哈", "name":"我是一个测试数据哦！"})
+
