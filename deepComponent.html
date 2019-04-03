@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>深度了解组件</h1>
+      <div v-for="post in posts">
+        <post-style v-bind:data="post"></post-style>
+      </div>
+      
+    </div>
+    <script>
+     //全局注册
+      Vue.component("post-style", {
+        template: "<div ><h2>{{data.title}}</h2><p>{{data.msg}}</p></div>",
+        props: ["data"]
+      });
+     //局部注册
+     var ComponentA = {};
+     var ComponentB = {};
+     var ComponentC = {};
+     var app = new Vue({
+        el: "#app",
+        data: {
+          posts: [
+            {
+              id: 1,
+              title: "组件名",
+              msg: "可以小写用-分割，也可以大驼峰式，但是引用时必须小写用-分割"
+            },
+            {
+              id: 2,
+              title: "全局注册",
+              msg:
+                "使用Vue.component全局注册，它们在注册之后可以用在任何新创建的 Vue 根实例 (new Vue) 的模板中。在所有子组件中也是如此，也就是说这三个组件在各自内部也都可以相互使用"
+            },
+            { id: 3, title: "局部注册", msg: "可以通过一个普通的 JavaScript 对象来定义组件，然后在components选项中定义使用的组件" }
+          ],
+          post: { id: 3, title: "prsim", msg: "singing for the rain" }
+        },
+        //局部注册
+        components:{
+            'component-a':ComponentA,
+            'component-b':ComponentB,
+            'component-c':ComponentC
+        }
+      });
+    </script>
+  </body>
+</html>
